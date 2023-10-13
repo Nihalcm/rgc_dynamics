@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:rgc_dynamics/screens/task/task_details.dart';
 
 class AllTask extends StatefulWidget {
   const AllTask({Key? key}) : super(key: key);
@@ -22,7 +23,7 @@ class _AllTaskState extends State<AllTask> {
           padding: const EdgeInsets.all(10.0),
           child: InkWell(
             onTap: () {
-              // Navigator.push(context, MaterialPageRoute(builder: (context) => DriverOrderDetails(),));
+              Navigator.push(context, MaterialPageRoute(builder: (context) => TaskDetails(),));
             },
             child: Container(
               width: size.width,
