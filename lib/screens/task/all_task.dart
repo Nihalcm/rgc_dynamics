@@ -79,7 +79,7 @@ class _AllTaskState extends State<AllTask> {
                     ),
                     Row(
                       children: [
-                        Text('On Date : ',
+                        Text('End Date : ',
                             style: Theme.of(context)
                                 .textTheme
                                 .titleMedium),

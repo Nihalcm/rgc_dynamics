@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "319732714202",
+    "project_id": "rgc-dynamics",
+    "storage_bucket": "rgc-dynamics.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:319732714202:android:6ba43a3a9b2b88928ab3e3",
+        "android_client_info": {
+          "package_name": "com.example.rgc_dynamics"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCqh35dh90W_Te8qyQelJBGPQ1cAhB0nJY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

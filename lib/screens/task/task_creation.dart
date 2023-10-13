@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -9,6 +10,7 @@ class CreateTask extends StatefulWidget {
 }
 
 class _CreateTaskState extends State<CreateTask> {
+  DateTime todaydate=DateTime.now();
   TextEditingController task_name = TextEditingController();
   TextEditingController description = TextEditingController();
   TextEditingController priority = TextEditingController();
@@ -168,14 +170,23 @@ class _CreateTaskState extends State<CreateTask> {
           padding: const EdgeInsets.all(10.0),
           child: Column(children: [
             textfield("Task Name", task_name, 1),
-            textfield("Priority", task_name, 1),
+            textfield("Priority", priority, 1),
            date(),
-            textfield("Description", task_name, 4),
+            textfield("Description", description, 4),
             SizedBox(
               height: 20,
             ),
             button(() {
-              Navigator.pop(context);
+            FirebaseFirestore.instance.collection("Task").doc().set({
+              "task_name":task_name.text,
+              "end_date":"${selectedDate.day}-${selectedDate.month}-${selectedDate.year}",
+              "description":description.text,
+              "priority":priority.text,
+              "uploaded_date":"${todaydate.day}-${todaydate.month}-${todaydate.year}",
+              "date":DateTime.now(),
+              "new":true
+
+            }).then((value) => Navigator.pop(context));
             })
           ]),
         ),
