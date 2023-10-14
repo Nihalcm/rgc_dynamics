@@ -1,16 +1,2 @@
-# rgc_dynamics
-
-A new Flutter project.
-
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Task Manager Flutter App
+Welcome to the Task Manager Flutter App repository! This Flutter app is designed to help you manage your tasks by listing them based on their dates, tracking the count of new and total tasks, viewing task details, adding new tasks, and deleting existing tasks. Whether you're a busy professional, a student, or just someone looking to stay organized, this app has got you covered.
