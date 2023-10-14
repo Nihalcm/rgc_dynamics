@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider<ModelWidgets>(create: (_) => ModelWidgets())
       ],
-      child: MaterialApp(
+      child: MaterialApp(debugShowCheckedModeBanner: false,
         theme: ThemeData(
             primaryColor: Color(0xFF002642),
             focusColor: Color(0xFF00A699),
