@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
-import '../dashboard/widgets.dart';
+import '../model/widgets.dart';
 
 class TaskDetails extends StatefulWidget {
   TaskDetails({Key? key, required this.taskId}) : super(key: key);

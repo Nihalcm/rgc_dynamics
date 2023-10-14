@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:rgc_dynamics/screens/dashboard/dashboard.dart';
-import 'package:rgc_dynamics/screens/dashboard/widgets.dart';
+import 'package:rgc_dynamics/screens/model/widgets.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

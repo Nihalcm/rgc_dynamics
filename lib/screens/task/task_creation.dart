@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
-import 'package:rgc_dynamics/screens/dashboard/widgets.dart';
+import 'package:rgc_dynamics/screens/model/widgets.dart';
 
 class CreateTask extends StatefulWidget {
   const CreateTask({Key? key}) : super(key: key);

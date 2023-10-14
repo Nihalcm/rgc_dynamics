@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:rgc_dynamics/screens/dashboard/widgets.dart';
+import 'package:rgc_dynamics/screens/model/widgets.dart';
 import 'package:rgc_dynamics/screens/task/task_creation.dart';
 import 'package:rgc_dynamics/screens/task/task_details.dart';
 
