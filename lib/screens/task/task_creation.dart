@@ -1,6 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:provider/provider.dart';
+import 'package:rgc_dynamics/screens/dashboard/widgets.dart';
 
 class CreateTask extends StatefulWidget {
   const CreateTask({Key? key}) : super(key: key);
@@ -10,66 +13,13 @@ class CreateTask extends StatefulWidget {
 }
 
 class _CreateTaskState extends State<CreateTask> {
-  DateTime todaydate=DateTime.now();
+  DateTime todaydate = DateTime.now();
   TextEditingController task_name = TextEditingController();
   TextEditingController description = TextEditingController();
   TextEditingController priority = TextEditingController();
-  //---------------------------------------------textfield-----------------------------------------------------------------------------
-  Column textfield(title, textEditingController, maxline) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          '${title}*',
-          style: Theme.of(context).textTheme.headlineMedium,
-        ),
-        SizedBox(
-          height: 5,
-        ),
-        TextField(
-          maxLines: maxline,
-          controller: textEditingController,
-          style: Theme.of(context).textTheme.headlineMedium,
-          decoration: InputDecoration(
-              enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(5),
-                  borderSide: BorderSide(color: Colors.black)),
-              focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(5),
-                  borderSide: BorderSide(color: Colors.teal)),
-              border:
-                  OutlineInputBorder(borderRadius: BorderRadius.circular(5)),
-              hintText: 'Enter here...',
-              hintStyle: TextStyle(
-                  color: Colors.grey,
-                  fontSize: 15,
-                  fontWeight: FontWeight.w100)),
-        )
-      ],
-    );
-  }
-//--------------------------------------------------------------------------------------------------------------------------
-//----------------------------------------------Button----------------------------------------------------------------------------
-  InkWell button(ontap) {
-    return InkWell(
-      onTap: ontap,
-      child: Container(
-        width: MediaQuery.of(context).size.width / 2,
-        height: 50,
-        decoration: BoxDecoration(
-            color: Theme.of(context).focusColor,
-            borderRadius: BorderRadius.circular(10)),
-        child: Center(
-          child: Text(
-            "Create",
-            style: GoogleFonts.nunito(
-                color: Colors.white, fontSize: 16, fontWeight: FontWeight.w700),
-          ),
-        ),
-      ),
-    );
-  }
-//--------------------------------------------------------------------------------------------------------------------------
+  List option = ["High", "Medium", "Low"];
+  bool isoppressed = false;
+  String? selectOption;
   //-------------------------------------------date-------------------------------------------------------------------------------
   DateTime selectedDate = DateTime.now();
   DateTime now = DateTime.now();
@@ -90,58 +40,6 @@ class _CreateTaskState extends State<CreateTask> {
     });
   }
 
-
-  Container date()
-  {
-    return      Container(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(
-              height: 8,
-            ),
-            Text(
-              "End Date :",
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-            SizedBox(
-              height: 5,
-            ),
-            Container(
-              height: 60,
-              decoration: BoxDecoration(
-                  color: Colors.white,
-                  border: Border.all(color: Colors.black),
-                  borderRadius: BorderRadius.circular(5)),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(
-                    margin: EdgeInsets.only(left: 10),
-                    child: Text(
-                      "${selectedDate.day}-${selectedDate.month}-${selectedDate.year}",
-                      style: Theme.of(context).textTheme.headlineMedium,
-                    ),
-                  ),
-                  IconButton(
-                    icon: Icon(
-                      Icons.date_range,
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        WidgetsBinding.instance?.focusManager.primaryFocus
-                            ?.unfocus();
-                        _selectDate(context);
-                      });
-                    },
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ));
-  }
 //--------------------------------------------------------------------------------------------------------------------------
   @override
   Widget build(BuildContext context) {
@@ -169,24 +67,136 @@ class _CreateTaskState extends State<CreateTask> {
         child: Padding(
           padding: const EdgeInsets.all(10.0),
           child: Column(children: [
-            textfield("Task Name", task_name, 1),
-            textfield("Priority", priority, 1),
-           date(),
-            textfield("Description", description, 4),
+            context
+                .read<ModelWidgets>()
+                .textfields(context, "Task Name", task_name, 1),
+            //-------------------------------------------------------------------
+            Container(
+              width: MediaQuery.of(context).size.width,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Priority*',
+                    style: Theme.of(context).textTheme.headlineMedium,
+                  ),
+                  SizedBox(
+                    height: 5,
+                  ),
+                  InkWell(
+                    onTap: () {
+                      setState(() {
+                        isoppressed = !isoppressed;
+                      });
+                    },
+                    child: Container(
+                      height: 50,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(5),
+                        border: Border.all(color: Colors.black),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                          children: [
+                            Container(
+                                child: selectOption != null
+                                    ? Text(selectOption.toString(),
+                                        style: TextStyle(
+                                            color: selectOption == "High"
+                                                ? Colors.red
+                                                : selectOption == "Medium"
+                                                    ? Colors.orange
+                                                    : Colors.green))
+                                    : Text(
+                                        'Select an Option',
+                                        style:
+                                            TextStyle(color: Color(0xFF0087B8)),
+                                      )),
+                            Spacer(),
+                            Container(
+                                child: isoppressed == true
+                                    ? Icon(Icons.arrow_drop_up_sharp)
+                                    : Icon(Icons.arrow_drop_down))
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 5,
+                  ),
+                  Container(
+                      child: isoppressed == true
+                          ? Container(
+                              width: MediaQuery.of(context).size.width,
+                              decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(5),
+                                  border: Border.all(color: Colors.black)),
+                              child: ListView.builder(
+                                scrollDirection: Axis.vertical,
+                                shrinkWrap: true,
+                                itemCount: option.length,
+                                itemBuilder: (context, index) {
+                                  return InkWell(
+                                      onTap: () {
+                                        setState(() {
+                                          selectOption = option[index];
+                                          isoppressed = false;
+                                        });
+                                      },
+                                      child: Padding(
+                                        padding: EdgeInsets.all(10),
+                                        child: Text(
+                                          option[index],
+                                          style: TextStyle(
+                                              color: option[index] == "High"
+                                                  ? Colors.red
+                                                  : option[index] == "Medium"
+                                                      ? Colors.orange
+                                                      : Colors.green),
+                                        ),
+                                      ));
+                                },
+                              ))
+                          : Container())
+                ],
+              ),
+            ),
+            //-------------------------------------------------------------------
+            context.read<ModelWidgets>().date(context, selectedDate, () {
+              setState(() {
+                WidgetsBinding.instance.focusManager.primaryFocus?.unfocus();
+                _selectDate(context);
+              });
+            }),
+            context
+                .read<ModelWidgets>()
+                .textfields(context, "Description", description, 4),
             SizedBox(
               height: 20,
             ),
-            button(() {
-            FirebaseFirestore.instance.collection("Task").doc().set({
-              "task_name":task_name.text,
-              "end_date":"${selectedDate.day}-${selectedDate.month}-${selectedDate.year}",
-              "description":description.text,
-              "priority":priority.text,
-              "uploaded_date":"${todaydate.day}-${todaydate.month}-${todaydate.year}",
-              "date":DateTime.now(),
-              "new":true
 
-            }).then((value) => Navigator.pop(context));
+            context.read<ModelWidgets>().button(context, () {
+              if (task_name.text.isEmpty ||
+                  description.text.isEmpty ||
+                  selectOption == null) {
+                Fluttertoast.showToast(msg: "Fill all Fields");
+              } else {
+                FirebaseFirestore.instance.collection("Task").doc().set({
+                  "task_name": task_name.text,
+                  "end_date":
+                      "${selectedDate.day}-${selectedDate.month}-${selectedDate.year}",
+                  "description": description.text,
+                  "priority": selectOption.toString(),
+                  "uploaded_date":
+                      "${todaydate.day}-${todaydate.month}-${todaydate.year}",
+                  "date": DateTime.now(),
+                  "new": true
+                }).then((value) => Navigator.pop(context));
+              }
             })
           ]),
         ),

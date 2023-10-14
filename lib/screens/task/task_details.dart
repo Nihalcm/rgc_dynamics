@@ -1,9 +1,13 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
+
+import '../dashboard/widgets.dart';
 
 class TaskDetails extends StatefulWidget {
-  const TaskDetails({Key? key}) : super(key: key);
-
+  TaskDetails({Key? key, required this.taskId}) : super(key: key);
+  final taskId;
   @override
   State<TaskDetails> createState() => _TaskDetailsState();
 }
@@ -34,52 +38,90 @@ class _TaskDetailsState extends State<TaskDetails> {
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(8.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                "Title",
-                style: Theme.of(context).textTheme.headlineLarge,
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Text(
-                "Priority : ",
-                style: GoogleFonts.nunito(
-                    color: Theme.of(context).primaryColor, fontSize: 15),
-              ),
-              SizedBox(
-                height: 5,
-              ),
-              Text("Uploaded Date : ",
-                  style: GoogleFonts.nunito(
-                      color: Theme.of(context).focusColor, fontSize: 15)),
-              SizedBox(
-                height: 5,
-              ),
-              Text(
-                "End Date : ",
-                style: GoogleFonts.nunito(color: Colors.red, fontSize: 15),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Text(
-                "Description :",
-                style: Theme.of(context).textTheme.headlineMedium,
-              ),
-              SizedBox(
-                height: 5,
-              ),
-              Text(
-                  "Critical tasks are urgent and high in value. High-priority tasks aren't urgent,yet they bring high value to the business. Medium-priority tasks are urgent but low in value. Lastly, low-priority tasks are non-urgent and low-value.",
-                  style: GoogleFonts.nunito(
-                      color: Theme.of(context).focusColor, fontSize: 15)),
-            ],
+          child: StreamBuilder(
+            stream: FirebaseFirestore.instance
+                .collection('Task')
+                .doc(widget.taskId)
+                .snapshots(),
+            builder: (context, snapshot) {
+              var data = snapshot.data;
+              if (snapshot.hasData) {
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      data!['task_name'],
+                      style: Theme.of(context).textTheme.headlineLarge,
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Text(
+                      "Priority : ${data['priority']}",
+                      style: GoogleFonts.nunito(
+                          color: data['priority'] == "High"
+                              ? Colors.red
+                              : data['priority'] == "Medium"
+                                  ? Colors.orange
+                                  : Colors.green,
+                          fontSize: 15),
+                    ),
+                    SizedBox(
+                      height: 5,
+                    ),
+                    Text("Uploaded Date : ${data['uploaded_date']}",
+                        style: GoogleFonts.nunito(
+                            color: Theme.of(context).focusColor, fontSize: 15)),
+                    SizedBox(
+                      height: 5,
+                    ),
+                    Text(
+                      "End Date : ${data['end_date']}",
+                      style:
+                          GoogleFonts.nunito(color: Colors.red, fontSize: 15),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Text(
+                      "Description :",
+                      style: Theme.of(context).textTheme.headlineMedium,
+                    ),
+                    SizedBox(
+                      height: 5,
+                    ),
+                    Text(data['description'],
+                        style: GoogleFonts.nunito(
+                            color: Theme.of(context).focusColor, fontSize: 15)),
+                  ],
+                );
+              }
+              return Center(
+                  child: SizedBox(
+                height: 50,
+                width: 50,
+                child: CircularProgressIndicator(),
+              ));
+            },
           ),
         ),
       ),
+      floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            context.read<ModelWidgets>().deleteAlert(context, () {
+              FirebaseFirestore.instance
+                  .collection("Task")
+                  .doc(widget.taskId)
+                  .delete()
+                  .then((value) => Navigator.pop(context))
+                  .then((value) => Navigator.pop(context));
+            });
+          },
+          backgroundColor: Theme.of(context).primaryColor,
+          child: Icon(
+            Icons.delete,
+            color: Colors.red,
+          )),
     );
   }
 }
