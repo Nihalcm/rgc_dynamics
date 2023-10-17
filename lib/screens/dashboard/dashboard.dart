@@ -13,15 +13,14 @@ class _DashboardState extends State<Dashboard> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Color(0xFFf3f3f3),
       appBar: AppBar(
-        centerTitle: true,
+       leading: Icon(Icons.menu,color: Colors.black,),
         title: Text(
-          'Dashboard',
-          style: Theme.of(context).textTheme.headlineLarge,
+          'To-do List',
+          style: TextStyle(color: Colors.black,fontWeight: FontWeight.w500),
         ),
-        elevation: 0,
-        backgroundColor: Colors.transparent,
+        backgroundColor: Colors.white,
       ),
       body: SingleChildScrollView(
         child: Padding(padding: const EdgeInsets.all(10.0), child: AllTask()),
