@@ -29,17 +29,28 @@ class _CreateTaskState extends State<CreateTask> {
   String selectedstartTime = "";
   String selectedendTime = "";
   DateTime now = DateTime.now();
-  Future<void> _selectstartTime(BuildContext context) async {
+  Future<void> _selectStartTime(BuildContext context) async {
     final TimeOfDay? pickedTime = await showTimePicker(
       context: context,
       initialTime: TimeOfDay.now(),
     );
 
     if (pickedTime != null) {
-      final formattedHour = pickedTime.hour.toString().padLeft(2, '0');
-      final formattedMinute = pickedTime.minute.toString().padLeft(2, '0');
-      final period = pickedTime.hour < 12 ? 'AM' : 'PM';
+      int hour = pickedTime.hour;
+      String period = 'AM';
 
+      if (hour >= 12) {
+
+        period = 'PM';
+        if (hour > 12) {
+          hour -= 12;
+        }
+      } else if (hour == 0) {
+        hour = 12;
+      }
+
+      final formattedHour = hour.toString().padLeft(2, '0');
+      final formattedMinute = pickedTime.minute.toString().padLeft(2, '0');
       final formattedTime = '$formattedHour:$formattedMinute $period';
 
       setState(() {
@@ -56,10 +67,21 @@ class _CreateTaskState extends State<CreateTask> {
     );
 
     if (pickedTime != null) {
-      final formattedHour = pickedTime.hour.toString().padLeft(2, '0');
-      final formattedMinute = pickedTime.minute.toString().padLeft(2, '0');
-      final period = pickedTime.hour < 12 ? 'AM' : 'PM';
+      int hour = pickedTime.hour;
+      String period = 'AM';
 
+      if (hour >= 12) {
+
+        period = 'PM';
+        if (hour > 12) {
+          hour -= 12;
+        }
+      } else if (hour == 0) {
+        hour = 12;
+      }
+
+      final formattedHour = hour.toString().padLeft(2, '0');
+      final formattedMinute = pickedTime.minute.toString().padLeft(2, '0');
       final formattedTime = '$formattedHour:$formattedMinute $period';
 
       setState(() {
@@ -291,7 +313,7 @@ class _CreateTaskState extends State<CreateTask> {
             Row(
               children: [
                 _buildTimeSelectionContainer(size, selectedstartTime, () {
-                  _selectstartTime(context);
+                  _selectStartTime(context);
                 }),
                 Spacer(),
                 _buildTimeSelectionContainer(size, selectedendTime, () {
