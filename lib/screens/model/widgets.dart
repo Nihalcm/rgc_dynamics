@@ -85,35 +85,36 @@ class ModelWidgets with ChangeNotifier {
 
 //  ----------------------------------------------------------------------------
   Column textfields(
-      BuildContext context, title, textEditingController, maxline) {
+      BuildContext context, title,hint, textEditingController, maxline) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          '${title}*',
-          style: Theme.of(context).textTheme.headlineMedium,
+          title,
+          style: TextStyle(
+              color: Colors.black,
+              fontWeight: FontWeight.w700),
         ),
         SizedBox(
-          height: 5,
+          height: 8,
         ),
         TextField(textCapitalization: TextCapitalization.sentences,
           maxLines: maxline,
           controller: textEditingController,
-          style: Theme.of(context).textTheme.headlineMedium,
-          decoration: InputDecoration(
+          decoration: InputDecoration(contentPadding: EdgeInsets.symmetric(vertical: 10,horizontal: 10),filled: true,fillColor: Colors.white,
               enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(5),
-                  borderSide: BorderSide(color: Colors.black)),
+                  borderSide: BorderSide(color: Colors.black12)),
               focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(5),
-                  borderSide: BorderSide(color: Colors.teal)),
+                  borderSide: BorderSide(color: Colors.black12)),
               border:
                   OutlineInputBorder(borderRadius: BorderRadius.circular(5)),
-              hintText: 'Enter here...',
+              hintText: hint,
               hintStyle: TextStyle(
                   color: Colors.grey,
                   fontSize: 15,
-                  fontWeight: FontWeight.w100)),
+                  fontWeight: FontWeight.w500)),
         )
       ],
     );
@@ -125,9 +126,9 @@ class ModelWidgets with ChangeNotifier {
       onTap: ontap,
       child: Container(
         width: MediaQuery.of(context).size.width / 2,
-        height: 50,
+        height: 40,
         decoration: BoxDecoration(
-            color: Theme.of(context).focusColor,
+            color:  Color(0xFF625caa),
             borderRadius: BorderRadius.circular(10)),
         child: Center(
           child: Text(
@@ -184,5 +185,113 @@ class ModelWidgets with ChangeNotifier {
         ),
       ],
     ));
+  }
+//  ---------------------------------------------------------------------------
+  void fromtoalert(BuildContext context, starttap, endtap) async {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        backgroundColor: Colors.transparent,
+        actions: [
+          Column(
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Column(
+                  children: [
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Text(
+                      'Please select an Option', // Changed textAlign property
+                      style: GoogleFonts.nunito(
+                        fontWeight: FontWeight.w700,
+                        color: Colors.teal,
+                      ),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Divider(height: 0,
+                      color: Colors.grey,
+                    ),
+                    Row(
+                      children: [
+                        Spacer(),
+                        TextButton(
+                          onPressed:
+
+                            starttap,
+                          child: Text(
+                            'Start Date',
+                            style: GoogleFonts.nunito(
+                              fontWeight: FontWeight.w600,
+                              color: Colors.green,
+                            ),
+                          ),
+                        ),
+                        Spacer(),
+                        Container(
+                          width: 1,
+                          height: 20,
+                          color: Colors.grey,
+                        ),
+                        Spacer(),
+                        TextButton(
+                          onPressed:
+                            endtap,
+
+                          child: Text(
+                            'End Date',
+                            style: GoogleFonts.nunito(
+                              fontWeight: FontWeight.w600,
+                              color: Colors.red,
+                            ),
+                          ),
+                        ),
+                        Spacer(),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+  Widget timeSelectionContainer(size,String selectedTime, Function() onPressed) {
+    final TextStyle textStyle = selectedTime.isEmpty
+        ? TextStyle(color: Colors.grey, fontSize: 14, fontWeight: FontWeight.w700)
+        : TextStyle(color: Colors.black, fontSize: 16, fontWeight: FontWeight.w700);
+
+    return Container(
+      height: 45,
+      width: size.width / 2 - 20,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        border: Border.all(color: Colors.black12),
+        borderRadius: BorderRadius.circular(5),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          SizedBox(width: 10),
+          Text(selectedTime.isEmpty ? "00:00" : selectedTime, style: textStyle),
+          Spacer(),
+          IconButton(
+            icon: Icon(Icons.alarm, color: Colors.grey),
+            onPressed: onPressed,
+          ),
+        ],
+      ),
+    );
   }
 }

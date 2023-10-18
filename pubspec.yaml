@@ -42,6 +42,7 @@ dependencies:
   provider:
   fluttertoast:
   iconsax:
+  intl:
 
 dev_dependencies:
   flutter_test:

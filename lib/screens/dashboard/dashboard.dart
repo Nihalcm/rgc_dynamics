@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:rgc_dynamics/screens/task/all_task.dart';
+import 'package:rgc_dynamics/screens/dashboard/all_task.dart';
 
 class Dashboard extends StatefulWidget {
   const Dashboard({Key? key}) : super(key: key);
@@ -14,7 +14,10 @@ class _DashboardState extends State<Dashboard> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color(0xFFf3f3f3),
-      appBar: AppBar(
+      appBar: AppBar(actions: [Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: CircleAvatar(radius: 15,backgroundColor: Colors.grey,),
+      )],
        leading: Icon(Icons.menu,color: Colors.black,),
         title: Text(
           'To-do List',

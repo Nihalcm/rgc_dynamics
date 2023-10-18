@@ -1,13 +1,12 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:provider/provider.dart';
 
-import '../model/widgets.dart';
+import 'package:flutter/material.dart';
+
 
 class TaskDetails extends StatefulWidget {
-  TaskDetails({Key? key, required this.taskId}) : super(key: key);
+  TaskDetails({Key? key, required this.taskId, required this.data})
+      : super(key: key);
   final taskId;
+  var data;
   @override
   State<TaskDetails> createState() => _TaskDetailsState();
 }
@@ -15,113 +14,152 @@ class TaskDetails extends StatefulWidget {
 class _TaskDetailsState extends State<TaskDetails> {
   @override
   Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Color(0xFFf3f3f3),
       appBar: AppBar(
-        centerTitle: true,
-        title: Text(
-          "Task Details",
-          style: Theme.of(context).textTheme.headlineLarge,
-        ),
-        elevation: 0,
-        backgroundColor: Colors.transparent,
+        title: Text(widget.data['task_name'],
+            style: TextStyle(fontSize: 18, color: Colors.black)),
+        backgroundColor: Colors.white,
         leading: IconButton(
             onPressed: () {
               Navigator.pop(context);
             },
             icon: Icon(
-              Icons.arrow_back_ios_new_rounded,
-              color: Theme.of(context).primaryColor,
+              Icons.arrow_back_rounded,
+              color: Colors.black,
               size: 18,
             )),
       ),
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: StreamBuilder(
-            stream: FirebaseFirestore.instance
-                .collection('Task')
-                .doc(widget.taskId)
-                .snapshots(),
-            builder: (context, snapshot) {
-              var data = snapshot.data;
-              if (snapshot.hasData) {
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      data!['task_name'],
-                      style: Theme.of(context).textTheme.headlineLarge,
+            padding: const EdgeInsets.all(15.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(
+                  height: 10,
+                ),
+                Text(
+                  "Task Name and details",
+                  style: TextStyle(
+                      color: Colors.black, fontWeight: FontWeight.w700),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Container(
+                  width: size.width,
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(color: Colors.black12)),
+                  child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(10.0),
+                          child: Text(
+                            widget.data['task_name'],
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.w500),
+                          ),
+                        ),
+                        Divider(
+                          height: 0,
+                          color: Colors.black12,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(10.0),
+                          child: Text(
+                            widget.data['description'],
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.w500),
+                          ),
+                        )
+                      ]),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Container(
+                  width: size.width,
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(color: Colors.black12)),
+                  child: Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Text(
+                      "${widget.data['priority']} Priority",
+                      style: TextStyle(
+                          color: Colors.black, fontWeight: FontWeight.w600),
                     ),
-                    SizedBox(
-                      height: 10,
+                  ),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Container(
+                  width: size.width,
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(color: Colors.black12)),
+                  child: Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Row(
+                      children: [
+                        SizedBox(
+                            width: 30,
+                            child: Icon(
+                              Icons.calendar_month_sharp,
+                              color: Colors.grey,
+                            )),
+                        SizedBox(
+                          width: 5,
+                        ),
+                        Text(
+                          "Start : ${widget.data['start_date']} at ${widget.data['start_time']}",
+                          style: TextStyle(
+                              color: Colors.black, fontWeight: FontWeight.w500),
+                        ),
+                      ],
                     ),
-                    Text(
-                      "Priority : ${data['priority']}",
-                      style: GoogleFonts.nunito(
-                          color: data['priority'] == "High"
-                              ? Colors.red
-                              : data['priority'] == "Medium"
-                                  ? Colors.orange
-                                  : Colors.green,
-                          fontSize: 15),
+                  ),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Container(
+                  width: size.width,
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(color: Colors.black12)),
+                  child: Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Row(
+                      children: [
+                        SizedBox(width: 30),
+                        SizedBox(
+                          width: 5,
+                        ),
+                        Text(
+                          "End : ${widget.data['end_date']} at ${widget.data['end_time']}",
+                          style: TextStyle(
+                              color: Colors.black, fontWeight: FontWeight.w500),
+                        ),
+                      ],
                     ),
-                    SizedBox(
-                      height: 5,
-                    ),
-                    Text("Uploaded Date : ${data['uploaded_date']}",
-                        style: GoogleFonts.nunito(
-                            color: Theme.of(context).focusColor, fontSize: 15)),
-                    SizedBox(
-                      height: 5,
-                    ),
-                    Text(
-                      "End Date : ${data['end_date']}",
-                      style:
-                          GoogleFonts.nunito(color: Colors.red, fontSize: 15),
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Text(
-                      "Description :",
-                      style: Theme.of(context).textTheme.headlineMedium,
-                    ),
-                    SizedBox(
-                      height: 5,
-                    ),
-                    Text(data['description'],
-                        style: GoogleFonts.nunito(
-                            color: Theme.of(context).focusColor, fontSize: 15)),
-                  ],
-                );
-              }
-              return Center(
-                  child: SizedBox(
-                height: 50,
-                width: 50,
-                child: CircularProgressIndicator(),
-              ));
-            },
-          ),
-        ),
+                  ),
+                ),
+              ],
+            )),
       ),
-      floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            context.read<ModelWidgets>().deleteAlert(context, () {
-              FirebaseFirestore.instance
-                  .collection("Task")
-                  .doc(widget.taskId)
-                  .delete()
-                  .then((value) => Navigator.pop(context))
-                  .then((value) => Navigator.pop(context));
-            });
-          },
-          backgroundColor: Theme.of(context).primaryColor,
-          child: Icon(
-            Icons.delete,
-            color: Colors.red,
-          )),
     );
   }
 }

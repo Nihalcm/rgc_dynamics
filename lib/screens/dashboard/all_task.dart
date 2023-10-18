@@ -1,12 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:rgc_dynamics/screens/dashboard/number_widget.dart';
 import 'package:rgc_dynamics/screens/model/widgets.dart';
 import 'package:rgc_dynamics/screens/task/task_creation.dart';
 import 'package:rgc_dynamics/screens/task/task_details.dart';
-import 'package:iconsax/iconsax.dart';
+
 
 class AllTask extends StatefulWidget {
   const AllTask({Key? key}) : super(key: key);
@@ -18,115 +18,7 @@ class AllTask extends StatefulWidget {
 class _AllTaskState extends State<AllTask> {
   @override
   Widget build(BuildContext context) {
-    SizedBox boxModel() {
-      return SizedBox(
-        height: 22,
-        child: Center(
-          child: Container(
-            width: 60,
-            height: 18,
-            decoration: BoxDecoration(
-                color: Colors.white, borderRadius: BorderRadius.circular(5)),
-            child: Padding(
-              padding: const EdgeInsets.only(bottom: 5),
-              child: Container(
-                decoration: BoxDecoration(
-                    color: Color(0xFFde5d8c),
-                    borderRadius: BorderRadius.circular(5)),
-                child: Padding(
-                  padding: const EdgeInsets.only(
-                      top: 8, bottom: 3, left: 5, right: 5),
-                  child: Container(
-                      decoration: BoxDecoration(
-                          color: Color(0xFFefaec5),
-                          borderRadius: BorderRadius.circular(5))),
-                ),
-              ),
-            ),
-          ),
-        ),
-      );
-    }
 
-    SizedBox noCheckBox() {
-      return SizedBox(
-        width: 25,
-        height: 22,
-        child: Center(
-          child: Stack(
-            children: [
-              Positioned(
-                bottom: 0,
-                left: 0,
-                child: Container(
-                  width: 18,
-                  height: 18,
-                  decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.8),
-                      borderRadius: BorderRadius.circular(2.5)),
-                  child: Padding(
-                    padding: const EdgeInsets.only(bottom: 5),
-                    child: Container(
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(2.5)),
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      );
-    }
-
-    SizedBox checkBoxModel() {
-      return SizedBox(
-        width: 25,
-        height: 22,
-        child: Center(
-          child: Stack(
-            children: [
-              Positioned(
-                bottom: 0,
-                left: 0,
-                child: Container(
-                  width: 18,
-                  height: 18,
-                  decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.8),
-                      borderRadius: BorderRadius.circular(2.5)),
-                  child: Padding(
-                    padding: const EdgeInsets.only(bottom: 5),
-                    child: Container(
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(2.5)),
-                    ),
-                  ),
-                ),
-              ),
-              Positioned(
-                  bottom: 4,
-                  left: 5,
-                  child: Icon(
-                    Icons.check_rounded,
-                    color: Color(0xFFff4873),
-                    opticalSize: 5,
-                  )),
-              Positioned(
-                  bottom: 2,
-                  left: 5,
-                  child: Icon(
-                    Icons.check_rounded,
-                    color: Colors.white,
-                    opticalSize: 5,
-                  ))
-            ],
-          ),
-        ),
-      );
-    }
 
     var size = MediaQuery.of(context).size;
     return StreamBuilder(
@@ -142,78 +34,7 @@ class _AllTaskState extends State<AllTask> {
             padding: const EdgeInsets.all(10.0),
             child:
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Container(
-                height: 110,
-                width: size.width,
-                decoration: BoxDecoration(
-                    gradient: LinearGradient(colors: [
-                      Color(0xFFff4873),
-                      Color(0xFFff4873).withOpacity(0.6)
-                    ], begin: Alignment.bottomLeft, end: Alignment.topRight),
-                    borderRadius: BorderRadius.circular(10)),
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 15, right: 15),
-                  child: Row(
-                    children: [
-                      Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              "Total Number of Tasks",
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w500),
-                            ),
-                            Text(
-                              "65",
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 35),
-                            ),
-                            Text(
-                              "Tasks",
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 12),
-                            ),
-                          ]),
-                      Spacer(),
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          checkBoxModel(),
-                          SizedBox(
-                            height: 5,
-                          ),
-                          checkBoxModel(),
-                          SizedBox(
-                            height: 5,
-                          ),
-                          noCheckBox()
-                        ],
-                      ),
-                      SizedBox(
-                        width: 5,
-                      ),
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          boxModel(),
-                          SizedBox(
-                            height: 5,
-                          ),
-                          boxModel(),
-                          SizedBox(
-                            height: 5,
-                          ),
-                          boxModel()
-                        ],
-                      )
-                    ],
-                  ),
-                ),
-              ),
+                  NumberDisplay(totalnumber: snapshot.data!.docs.length.toString()),
               SizedBox(
                 height: 10,
               ),
@@ -279,14 +100,16 @@ class _AllTaskState extends State<AllTask> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) =>
-                                  TaskDetails(taskId: data.id),
+                              builder: (context) => TaskDetails(
+                                taskId: data.id,
+                                data: data,
+                              ),
                             ));
                       },
                       child: Container(
                         width: size.width,
                         decoration: BoxDecoration(
-                          border: Border.all(color: Colors.black12),
+                            border: Border.all(color: Colors.black12),
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(10)),
                         child: Padding(
@@ -295,13 +118,15 @@ class _AllTaskState extends State<AllTask> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Row(crossAxisAlignment: CrossAxisAlignment.start,
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Container(
-                                    width: size.width * 0.65,
+                                  Expanded(
+                                    flex: 8,
                                     child: Text(
                                       data['task_name'],
                                       style: TextStyle(color: Colors.black),
+                                      softWrap: true,
                                     ),
                                   ),
                                   SizedBox(
@@ -320,20 +145,17 @@ class _AllTaskState extends State<AllTask> {
                                     ),
                                     child: Center(
                                       child: Padding(
-                                        padding: const EdgeInsets.only(
-                                            left: 2.5,
-                                            right: 2.5,
-                                            top: 2.5,
-                                            bottom: 2.5),
+                                        padding: const EdgeInsets.all(2.5),
                                         child: Text(
                                           data['priority'],
                                           style: TextStyle(
-                                              fontSize: 12,
-                                              color: data['priority'] == 'High'
-                                                  ? Colors.red
-                                                  : data['priority'] == 'Medium'
-                                                      ? Colors.orange
-                                                      : Colors.yellow),
+                                            fontSize: 12,
+                                            color: data['priority'] == 'High'
+                                                ? Colors.red
+                                                : data['priority'] == 'Medium'
+                                                    ? Colors.orange
+                                                    : Colors.yellow,
+                                          ),
                                         ),
                                       ),
                                     ),
@@ -376,7 +198,10 @@ class _AllTaskState extends State<AllTask> {
                                                   Navigator.pop(context));
                                         });
                                       },
-                                      child: Icon(CupertinoIcons.delete,size: 17,))
+                                      child: Icon(
+                                        CupertinoIcons.delete,
+                                        size: 17,
+                                      ))
                                 ],
                               ),
                             ],
